@@ -23,6 +23,12 @@ You can then check the gtk version on your machine:
 pkg-config --modversion gtk4
 ```
 
+Then run the GUI with:
+
+```bash
+cargo run  --bin ocm-gtk -- datasets/tiny/complete_4_5.gr -t
+```
+
 ## Project structure
 
 This project uses `cargo workspaces`.
