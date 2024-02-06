@@ -34,10 +34,11 @@ cargo run  --bin ocm-gtk -- datasets/tiny/complete_4_5.gr -t
 This project uses `cargo workspaces`.
 
 ```bash
-├── datasets    # Graph datasets for testing
+├── datasets     # Graph datasets for testing
 │   └── tiny
-├── ocm-cli     # CLI program for solving the OCM problem
-├── ocm-gtk     # GTK GUI for solving the OCM problem
-├── ocm-parser  # Graph dataset parser
-└── ocm-solver  # Implementation logic
+├── ocm-cli      # CLI program for solving the OCM problem
+├── ocm-gtk      # GTK GUI for solving the OCM problem
+├── ocm-parser   # Graph dataset parser
+├── ocm-plotter  # Plotting functions
+└── ocm-solver   # Implementation logic
 ```

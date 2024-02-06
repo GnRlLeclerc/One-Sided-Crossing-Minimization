@@ -578,6 +578,7 @@ dependencies = [
  "clap",
  "gtk4",
  "ocm-parser",
+ "ocm-plotter",
  "plotters",
  "plotters-cairo",
 ]
@@ -587,6 +588,14 @@ name = "ocm-parser"
 version = "0.1.0"
 dependencies = [
  "winnow",
+]
+
+[[package]]
+name = "ocm-plotter"
+version = "0.1.0"
+dependencies = [
+ "ocm-parser",
+ "plotters",
 ]
 
 [[package]]

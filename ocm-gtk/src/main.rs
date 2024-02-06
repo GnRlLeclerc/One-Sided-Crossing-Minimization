@@ -1,10 +1,12 @@
+use std::rc::Rc;
 use std::time::Instant;
 
-use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow};
-
+use crate::gtk_utils::plot_in_window;
 use clap::Parser;
 use ocm_parser::parse_file;
+
+mod gtk_utils;
+mod plotter_widget;
 
 #[derive(Parser, Debug)]
 #[command(author="Thibaut de Saivre, Thomas Fourier", version, about="GUI solver for the OCM problem", long_about = None)]
@@ -44,22 +46,7 @@ fn main() {
         );
     }
 
-    let application = gtk::Application::new(Some(APP_ID), Default::default());
-
-    // Connect to "activate" signal of `application`
-    application.connect_activate(build_ui);
-
-    // Run with empty args
-    application.run_with_args::<&str>(&[]);
-}
-
-fn build_ui(app: &Application) {
-    // Create a window and set the title
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("GUI OCM Problem Solver")
-        .build();
-
-    // Present window
-    window.present();
+    // Display the result in a new window
+    let graph_rc = Rc::new(graph);
+    plot_in_window(APP_ID, graph_rc);
 }

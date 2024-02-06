@@ -1,15 +1,10 @@
 [package]
-name = "ocm-gtk"
+name = "ocm-plotter"
 version = "0.1.0"
 edition = "2021"
-description = "GTK display interface for solving the OCM problem"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.4.18", features = ["derive"] }
-gtk = { version = "0.7.3", package = "gtk4" }
 plotters = { version = "0.3.5", default-features = false }
-plotters-cairo = "0.5.0"
 ocm-parser = { path = "../ocm-parser" }
-ocm-plotter = { path = "../ocm-plotter" }

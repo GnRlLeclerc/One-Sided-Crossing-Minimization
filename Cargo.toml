@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
 
-members = ["ocm-parser", "ocm-cli", "ocm-gtk", "ocm-solver"]
+members = ["ocm-parser", "ocm-cli", "ocm-gtk", "ocm-solver", "ocm-plotter"]
