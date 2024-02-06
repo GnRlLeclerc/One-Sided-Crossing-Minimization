@@ -11,3 +11,10 @@ pub struct BipartiteGraph {
     /// Edges between the top and bottom nodes
     pub edges: Vec<(i64, i64)>,
 }
+
+impl BipartiteGraph {
+    /// Create a new empty graph
+    pub fn new() -> Self {
+        Self::default()
+    }
+}

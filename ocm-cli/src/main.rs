@@ -2,6 +2,7 @@ use std::time::Instant;
 
 use clap::Parser;
 use ocm_parser::parse_file;
+use ocm_plotter::plottable::plot_to_file;
 
 #[derive(Parser, Debug)]
 #[command(author="Thibaut de Saivre, Thomas Fourier", version, about="Solver for the OCM problem", long_about = None)]
@@ -38,4 +39,7 @@ fn main() {
             elapsed_time.subsec_nanos()
         );
     }
+
+    // Save the resulting image to a file
+    plot_to_file(&graph, "graph.png");
 }

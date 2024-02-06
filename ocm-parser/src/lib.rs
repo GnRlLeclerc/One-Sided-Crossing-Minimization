@@ -14,7 +14,7 @@ pub fn parse_file(filename: &str) -> BipartiteGraph {
     let reader = std::io::BufReader::new(file);
     let mut lines = reader.lines();
 
-    let mut graph = BipartiteGraph::default(); // Create an empty graph
+    let mut graph = BipartiteGraph::new(); // Create an empty graph
 
     // Parse the header line
     let header_line = lines.next().unwrap().unwrap();

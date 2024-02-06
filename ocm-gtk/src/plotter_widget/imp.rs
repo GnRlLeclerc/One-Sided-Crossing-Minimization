@@ -64,8 +64,7 @@ impl WidgetImpl for PlotterWidget {
                 .plottable
                 .as_ref()
                 .unwrap()
-                .plot(&mut root)
-                .unwrap();
+                .plot(&mut root);
         } else {
             // Else, fill the canvas with white
             root.fill(&WHITE).unwrap();

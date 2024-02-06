@@ -25,6 +25,8 @@ pub fn plot_in_window(app_id: &str, plottable: Rc<dyn for<'a> Plottable<CairoBac
         let window = ApplicationWindow::builder()
             .application(app)
             .title("GUI OCM Problem Solver")
+            .default_height(500)
+            .default_width(800)
             .child(&plot_widget)
             .build();
 
@@ -34,5 +36,3 @@ pub fn plot_in_window(app_id: &str, plottable: Rc<dyn for<'a> Plottable<CairoBac
     // Run with empty args
     application.run_with_args::<&str>(&[]);
 }
-
-// TODO: create utility functions that would allow updating the plot on the same window ? Maybe even do animations
