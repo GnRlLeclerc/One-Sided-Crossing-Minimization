@@ -1,8 +1,8 @@
+pub mod graphs;
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
-
-// TODO: define the solving logic here
 
 #[cfg(test)]
 mod tests {

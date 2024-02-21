@@ -8,4 +8,5 @@ edition = "2021"
 [dependencies]
 plotters = { version = "0.3.5", default-features = false }
 ocm-parser = { path = "../ocm-parser" }
+ocm-solver = { path = "../ocm-solver" }
 plotters-bitmap = "0.3.3"

@@ -1,4 +1,5 @@
 use ocm_parser::bipartite_graph::BipartiteGraph;
+use ocm_solver::graphs::AbscissaGraph;
 use plottable::Plottable;
 use plotters::prelude::*;
 use plotters::{backend::DrawingBackend, coord::Shift, drawing::DrawingArea};
@@ -23,7 +24,7 @@ where
         let horizontal_normalization =
             self.bottom_node_count.max(self.top_node_count) as f64 * 0.5f64;
 
-        // Try dusplaying them, now (see if size scales well.)
+        // Try dysplaying them, now (see if size scales well.)
         // Create the scatter plot context
         let mut scatter_ctx = ChartBuilder::on(root)
             .x_label_area_size(40)
@@ -72,6 +73,59 @@ where
                                 / horizontal_normalization,
                             bottom_height,
                         ),
+                    ],
+                    BLACK,
+                )
+            }))
+            .expect("Unable to draw the edges");
+    }
+}
+
+/// Example implementation for Abscissa Graph.
+/// As the positions are already scaled within [-1, 1], plotting is simpler.
+impl<'a, DB> Plottable<DB> for AbscissaGraph
+where
+    DB: DrawingBackend + 'a,
+{
+    fn plot(&self, root: &mut DrawingArea<DB, Shift>) {
+        root.fill(&WHITE).unwrap();
+
+        // Y position for the nodes
+        let top_height = 1.0;
+        let bottom_height = -1.0;
+
+        // Create the scatter plot context
+        let mut scatter_ctx = ChartBuilder::on(root)
+            .x_label_area_size(40)
+            .y_label_area_size(40)
+            .build_cartesian_2d(-2f64..2f64, -2f64..2f64)
+            .expect("Unable to build the scatter plot context");
+
+        // Plot the top nodes
+        scatter_ctx
+            .draw_series(
+                self.top_nodes_abscissas
+                    .iter()
+                    .map(|x| Circle::new((*x, top_height), 8, BLUE.filled())),
+            )
+            .expect("Unable to draw the top nodes");
+
+        // Plot the bottom nodes
+        scatter_ctx
+            .draw_series(
+                self.bottom_nodes_abscissas
+                    .iter()
+                    .map(|x| Circle::new((*x, bottom_height), 8, RED.filled())),
+            )
+            .expect("Unable to draw the bottom nodes");
+
+        // Draw the lines between the nodes
+        scatter_ctx
+            .draw_series(self.edges.iter().map(|(i1, i2)| {
+                PathElement::new(
+                    vec![
+                        (self.top_nodes_abscissas[*i1 as usize], top_height),
+                        (self.bottom_nodes_abscissas[*i2 as usize], bottom_height),
                     ],
                     BLACK,
                 )

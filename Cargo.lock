@@ -678,6 +678,7 @@ dependencies = [
  "gtk4",
  "ocm-parser",
  "ocm-plotter",
+ "ocm-solver",
  "plotters",
  "plotters-cairo",
 ]
@@ -694,6 +695,7 @@ name = "ocm-plotter"
 version = "0.1.0"
 dependencies = [
  "ocm-parser",
+ "ocm-solver",
  "plotters",
  "plotters-bitmap",
 ]

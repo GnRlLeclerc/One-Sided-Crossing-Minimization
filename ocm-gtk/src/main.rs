@@ -4,6 +4,7 @@ use std::time::Instant;
 use crate::gtk_utils::plot_in_window;
 use clap::Parser;
 use ocm_parser::parse_file;
+use ocm_solver::graphs::AbscissaGraph;
 
 mod gtk_utils;
 mod plotter_widget;
@@ -30,6 +31,7 @@ fn main() {
     println!("Reading graph from file {}", args.source);
 
     let graph = parse_file(&args.source);
+    let graph: AbscissaGraph = (&graph).into(); // Convert the input graph into a graph with abscissas
 
     println!("Graph read from file: {:?}", graph);
 
