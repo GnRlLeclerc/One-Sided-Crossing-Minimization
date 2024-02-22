@@ -15,7 +15,7 @@ pub struct AbscissaGraph {
     pub bottom_nodes_abscissas: Vec<f64>,
 
     /// Edges between the top and bottom nodes
-    pub edges: Vec<(i64, i64)>,
+    pub edges: Vec<(u64, u64)>,
 }
 
 impl AbscissaGraph {
@@ -76,8 +76,8 @@ impl From<&BipartiteGraph> for AbscissaGraph {
         let scale = 2_f64 / max_row_node_count as f64;
 
         // Indices are in [0, n[, will be brought to [0, m] by scaling, and must have m/2 substracted
-        let top_offset = -origin.top_node_count as f64 * scale * 0.5_f64;
-        let bottom_offset = -origin.bottom_node_count as f64 * scale * 0.5_f64;
+        let top_offset = -(origin.top_node_count as f64) * scale * 0.5_f64;
+        let bottom_offset = -(origin.bottom_node_count as f64) * scale * 0.5_f64;
 
         // Fill the nodes. Keep in mind that the edges assume that the indices start from 1.
         for index in 0..origin.top_node_count {
@@ -95,4 +95,33 @@ impl From<&BipartiteGraph> for AbscissaGraph {
     }
 }
 
-// TODO: implement the other conversion in order to write the output one back into filesystem.
+impl From<&AbscissaGraph> for BipartiteGraph {
+    fn from(origin: &AbscissaGraph) -> Self {
+        let mut graph = BipartiteGraph::new();
+
+        // The BipartiteGraph lists its node indices starting from 1, left to right.
+        // The AbscissaGraph node abscissas are not in order, we need to compute their sorted indices and update the edges
+        let top_indices = sorted_index_array(&origin.top_nodes_abscissas);
+        let bottom_indices = sorted_index_array(&origin.bottom_nodes_abscissas);
+
+        // Clone the edges and reset their indices back to the BipartiteGraph format
+        // (top ones start at 1, bottom ones start at top_count + 1)
+        let top_count = origin.top_nodes_abscissas.len();
+        graph.edges = origin
+            .edges
+            .iter()
+            .map(|(top_index, bottom_index)| {
+                (
+                    (top_indices[*top_index as usize] + 1) as u64,
+                    (bottom_indices[*bottom_index as usize] + 1 + top_count) as u64,
+                )
+            })
+            .collect();
+
+        // Fill the nodes. Keep in mind that the edges assume that the indices start from 1.
+        graph.top_node_count = origin.top_nodes_abscissas.len() as u64;
+        graph.bottom_node_count = origin.bottom_nodes_abscissas.len() as u64;
+
+        graph
+    }
+}

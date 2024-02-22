@@ -14,8 +14,8 @@ where
     fn plot(&self, root: &mut DrawingArea<DB, Shift>) {
         root.fill(&WHITE).unwrap();
 
-        let top_center_offset = -self.top_node_count as f64 * 0.5;
-        let bottom_center_offset = -self.bottom_node_count as f64 * 0.5;
+        let top_center_offset = -(self.top_node_count as f64) * 0.5;
+        let bottom_center_offset = -(self.bottom_node_count as f64) * 0.5;
 
         // Y position for the nodes
         let top_height = 1.0;

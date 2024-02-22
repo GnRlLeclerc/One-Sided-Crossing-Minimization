@@ -5,12 +5,12 @@ use std::io::Write;
 #[derive(Debug, Default, Clone)]
 pub struct BipartiteGraph {
     /// Number of top nodes. Their indices start from 1
-    pub top_node_count: i64,
+    pub top_node_count: u64,
     /// Number of bottom nodes. Their indices start from `top_node_count + 1`
-    pub bottom_node_count: i64,
+    pub bottom_node_count: u64,
 
     /// Edges between the top and bottom nodes
-    pub edges: Vec<(i64, i64)>,
+    pub edges: Vec<(u64, u64)>,
 }
 
 impl BipartiteGraph {
