@@ -1,9 +1,11 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 use std::time::Instant;
 
 use crate::gtk_utils::plot_in_window;
 use clap::Parser;
 use ocm_parser::parse_file;
+use ocm_solver::algorithms::median_heuristic_solve;
 use ocm_solver::graphs::AbscissaGraph;
 
 mod gtk_utils;
@@ -49,6 +51,15 @@ fn main() {
     }
 
     // Display the result in a new window
-    let graph_rc = Rc::new(graph);
-    plot_in_window(APP_ID, graph_rc);
+    let graph_rc = Rc::new(RefCell::new(graph));
+    plot_in_window(APP_ID, graph_rc.clone());
+
+    // Do one iteration of the median heuristic (without rebalancing)
+    median_heuristic_solve(&mut graph_rc.borrow_mut());
+
+    // Rebalance the graph abscissas before display
+    // TODO
+
+    // Display the result again
+    plot_in_window(APP_ID, graph_rc.clone());
 }

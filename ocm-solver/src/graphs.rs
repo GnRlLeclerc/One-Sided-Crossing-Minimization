@@ -21,6 +21,12 @@ impl AbscissaGraph {
     pub fn new() -> Self {
         Self::default()
     }
+
+    /// Rebalance and symmetrize the graph abscissas for clean display.
+    /// Call this method after updating vertex abscissas using a barycentric or median heuristic method.
+    pub fn rebalance_abscissas(&mut self) {
+        todo!()
+    }
 }
 
 /// Implement the conversion from a bipartite graph reference (does not consume the original one)

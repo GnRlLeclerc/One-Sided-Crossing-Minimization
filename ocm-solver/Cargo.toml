@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 ocm-parser = { path = "../ocm-parser" }
+ordered-float = "4.2.0"

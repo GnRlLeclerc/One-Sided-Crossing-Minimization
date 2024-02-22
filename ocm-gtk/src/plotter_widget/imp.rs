@@ -9,15 +9,18 @@ use ocm_plotter::plottable::Plottable;
 use plotters::prelude::*;
 use plotters_cairo::CairoBackend;
 
+// Type alias for simplicity
+type SharedMutableOption<T> = Option<Rc<RefCell<T>>>;
+
 /// A wrapper struct for plottable structs
 ///
 /// Let's dive into the details of this struct:
 /// - Option: because the Widget might have nothing to plot
-/// - Rc: double usage. It allows polymorphism for the trait Plottable, and it allows sharing a data struct without copy.
+/// - Rc<RefCell>: double usage. It allows polymorphism for the trait Plottable, and it allows sharing a data struct without copy + mutating it.
 /// - dyn Plottable<CairoBackend>: a struct that implements the Plottable trait, in particular for the GTK Cairo backend
 #[derive(Default, Clone)]
 struct PlottableWrapper {
-    plottable: Option<Rc<dyn for<'a> Plottable<CairoBackend<'a>>>>,
+    plottable: SharedMutableOption<dyn for<'a> Plottable<CairoBackend<'a>>>,
 }
 
 /// The Plotter Widget.
@@ -64,6 +67,7 @@ impl WidgetImpl for PlotterWidget {
                 .plottable
                 .as_ref()
                 .unwrap()
+                .borrow_mut()
                 .plot(&mut root);
         } else {
             // Else, fill the canvas with white
@@ -75,7 +79,7 @@ impl WidgetImpl for PlotterWidget {
 
 impl PlotterWidget {
     /// Set the plottable struct to be plotted
-    pub fn set_plottable(&self, plottable: Rc<dyn for<'a> Plottable<CairoBackend<'a>>>) {
+    pub fn set_plottable(&self, plottable: Rc<RefCell<dyn for<'a> Plottable<CairoBackend<'a>>>>) {
         self.wrapper.borrow_mut().plottable = Some(plottable);
     }
 

@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{cell::RefCell, rc::Rc};
 
 use gtk::glib::{self, subclass::types::ObjectSubclassIsExt, Object};
 use ocm_plotter::plottable::Plottable;
@@ -17,7 +17,10 @@ impl PlotterWidget {
     }
 
     /// Set the plottable struct to be plotted
-    pub fn set_plottable(&mut self, plottable: Rc<dyn for<'a> Plottable<CairoBackend<'a>>>) {
+    pub fn set_plottable(
+        &mut self,
+        plottable: Rc<RefCell<dyn for<'a> Plottable<CairoBackend<'a>>>>,
+    ) {
         self.imp().set_plottable(plottable);
     }
 
