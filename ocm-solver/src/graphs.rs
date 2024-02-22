@@ -2,6 +2,8 @@
 
 use ocm_parser::bipartite_graph::BipartiteGraph;
 
+use crate::algo_utils::sorted_index_array;
+
 /// Abscissa-based graph data structure, where each node has an abscissa attributed at construction.
 /// By convention, we space all vertices evenly among the top and bottom, such that the extremal vertices
 /// in either the top or bottom layer, depending on which one has the most vertices, fall right on -1 and +1.
@@ -25,7 +27,33 @@ impl AbscissaGraph {
     /// Rebalance and symmetrize the graph abscissas for clean display.
     /// Call this method after updating vertex abscissas using a barycentric or median heuristic method.
     pub fn rebalance_abscissas(&mut self) {
-        todo!()
+        // Compute the absissas
+        let max_row_node_count = self
+            .bottom_nodes_abscissas
+            .len()
+            .max(self.top_nodes_abscissas.len());
+        // Scale the nodes into [-1, 1] by multiplying by a scaling value and adding a negative offset
+        let scale = 2_f64 / max_row_node_count as f64;
+
+        // Indices are in [0, n[, will be brought to [0, m] by scaling, and must have m/2 substracted
+        let top_offset = -(self.top_nodes_abscissas.len() as f64) * scale * 0.5_f64;
+        let bottom_offset = -(self.bottom_nodes_abscissas.len() as f64) * scale * 0.5_f64;
+
+        // Compute the top node indices
+        let indices = sorted_index_array(&self.top_nodes_abscissas);
+
+        // Iterate over the top nodes and update their abscissas
+        for (index, &old_index) in indices.iter().enumerate() {
+            self.top_nodes_abscissas[old_index] = index as f64 * scale + top_offset;
+        }
+
+        // Compute the bottom node indices
+        let indices = sorted_index_array(&self.bottom_nodes_abscissas);
+
+        // Iterate over the bottom nodes and update their abscissas
+        for (index, &old_index) in indices.iter().enumerate() {
+            self.bottom_nodes_abscissas[old_index] = index as f64 * scale + bottom_offset;
+        }
     }
 }
 
@@ -66,3 +94,5 @@ impl From<&BipartiteGraph> for AbscissaGraph {
         graph
     }
 }
+
+// TODO: implement the other conversion in order to write the output one back into filesystem.

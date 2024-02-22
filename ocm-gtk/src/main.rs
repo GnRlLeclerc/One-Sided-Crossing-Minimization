@@ -58,7 +58,7 @@ fn main() {
     median_heuristic_solve(&mut graph_rc.borrow_mut());
 
     // Rebalance the graph abscissas before display
-    // TODO
+    graph_rc.borrow_mut().rebalance_abscissas();
 
     // Display the result again
     plot_in_window(APP_ID, graph_rc.clone());

@@ -24,3 +24,11 @@ pub fn sorted_array_median<T: Add<Output = T> + std::ops::Div<Output = T> + From
         }
     }
 }
+
+/// Given an array of values implementing the `PartialOrd` trait, returns an array of indices where
+/// the 1st index points to the smallest value, the 2nd index points to the 2nd smallest value, etc.
+pub fn sorted_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
+    let mut indices: Vec<usize> = (0..array.len()).collect();
+    indices.sort_by(|&i, &j| array[i].partial_cmp(&array[j]).unwrap());
+    indices
+}
