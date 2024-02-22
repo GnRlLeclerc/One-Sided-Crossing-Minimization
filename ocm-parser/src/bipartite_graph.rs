@@ -37,6 +37,8 @@ impl BipartiteGraph {
             writeln!(writer, "{} {}", top, bottom)?;
         }
 
+        println!("Graph saved to file {}", filename);
+
         Ok(())
     }
 }

@@ -4,6 +4,7 @@ use std::time::Instant;
 
 use crate::gtk_utils::plot_in_window;
 use clap::Parser;
+use ocm_parser::bipartite_graph::BipartiteGraph;
 use ocm_parser::parse_file;
 use ocm_solver::algorithms::median_heuristic_solve;
 use ocm_solver::graphs::AbscissaGraph;
@@ -21,6 +22,14 @@ struct Args {
     /// Measure execution time
     #[arg(short, long)]
     time: bool,
+
+    /// Display debug information
+    #[arg(short, long)]
+    debug: bool,
+
+    /// Save the output to a file
+    #[arg(short, long)]
+    output_file: Option<String>,
 }
 
 const APP_ID: &str = "gitlab.binets.fr.gui-ocm-problem-solver";
@@ -30,12 +39,16 @@ fn main() {
 
     let start_time = Instant::now();
 
-    println!("Reading graph from file {}", args.source);
+    if args.debug {
+        println!("Reading graph from file {}", args.source);
+    }
 
     let graph = parse_file(&args.source);
     let graph: AbscissaGraph = (&graph).into(); // Convert the input graph into a graph with abscissas
 
-    println!("Graph read from file: {:?}", graph);
+    if args.debug {
+        println!("Graph read from file: {:#?}", graph);
+    }
 
     // Measure the elapsed time
     let elapsed_time = start_time.elapsed();
@@ -62,4 +75,11 @@ fn main() {
 
     // Display the result again
     plot_in_window(APP_ID, graph_rc.clone());
+
+    if args.output_file.is_some() {
+        // Save the resulting graph to a file
+        let filename = args.output_file.unwrap();
+        let new_graph: BipartiteGraph = (&*graph_rc.borrow()).into();
+        new_graph.save_to_file(&filename).unwrap();
+    }
 }
