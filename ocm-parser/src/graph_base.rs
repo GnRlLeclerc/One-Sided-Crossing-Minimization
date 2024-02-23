@@ -9,5 +9,5 @@ pub type Edge = (u64, u64);
 /// - The first bottom node has an index of 0.
 /// - The nodes are ordered by their indices.
 pub trait OrderedGraph {
-    fn get_ordered_edges(&self) -> Vec<(u64, u64)>;
+    fn get_ordered_edges(&self) -> Vec<Edge>;
 }

@@ -43,7 +43,7 @@ fn main() {
     let graph = parse_file(&args.source);
 
     if args.debug {
-        println!("Graph read from file: {:#?}", graph);
+        println!("Graph read from file: {:?}", graph);
     }
 
     println!("Crossings before: {}", line_sweep_crossings(&graph));

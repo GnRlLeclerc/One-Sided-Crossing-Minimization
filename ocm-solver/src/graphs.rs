@@ -130,7 +130,7 @@ impl From<&AbscissaGraph> for BipartiteGraph {
 }
 
 impl OrderedGraph for AbscissaGraph {
-    fn get_ordered_edges(&self) -> Vec<(u64, u64)> {
+    fn get_ordered_edges(&self) -> Vec<Edge> {
         // The AbscissaGraph's nodes are not ordered by their indices.
         // We must rebuild the edges with the correct indices.
         let top_indices = rank_index_array(&self.top_nodes_abscissas);

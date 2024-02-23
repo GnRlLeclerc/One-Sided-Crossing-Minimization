@@ -26,13 +26,13 @@ pkg-config --modversion gtk4
 Then run the GUI with:
 
 ```bash
-cargo run  --bin ocm-cli -- datasets/tiny/complete_4_5.gr
+cargo run --release --bin ocm-gtk -- datasets/tiny/complete_4_5.gr
 ```
 
-Run the CLI solver for large graphs with:
+Run the CLI solver for large graphs and time it with:
 
 ```bash
-cargo run --release  --bin ocm-cli --  -t datasets/large/25.gr
+cargo run --release --bin ocm-cli --  -t datasets/large/25.gr
 ```
 
 ## Project structure

@@ -46,7 +46,7 @@ impl BipartiteGraph {
 }
 
 impl OrderedGraph for BipartiteGraph {
-    fn get_ordered_edges(&self) -> Vec<(u64, u64)> {
+    fn get_ordered_edges(&self) -> Vec<Edge> {
         // A BipartiteGraph already has its nodes ordered by their indices.
         // However, top nodes are indexed from 1, and bottom nodes are indexed from top_node_count + 1.
         // This is absolutely not optimal when using the line sweep algorithm,

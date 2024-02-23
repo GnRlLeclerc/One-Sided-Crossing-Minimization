@@ -6,7 +6,7 @@
 use crate::algo_utils::edges_min_index_sort;
 
 use ahash::AHashSet;
-use ocm_parser::graph_base::OrderedGraph;
+use ocm_parser::graph_base::{Edge, OrderedGraph};
 
 /// Count the crossings in a graph using the line sweep algorithm.
 ///
@@ -33,7 +33,7 @@ pub fn line_sweep_crossings<T: OrderedGraph>(graph: &T) -> u64 {
 
     // Store currently active edges
     // Space: O(E)
-    let mut active_edges: AHashSet<(u64, u64)> = AHashSet::new();
+    let mut active_edges: AHashSet<Edge> = AHashSet::new();
     let mut line_position = 0_u64; // Current index swept by the line
     let mut crossings = 0_u64; // Total number of crossings found
     let mut line_position_changed; // Boolean flag
@@ -69,12 +69,12 @@ pub fn line_sweep_crossings<T: OrderedGraph>(graph: &T) -> u64 {
 
 /// Given a vertical line position, remove all dead edges from a set of active edges.
 /// A dead edge is an edge whose maximum index is less or equal to the line position.
-fn remove_dead_edges(active_edges: &mut AHashSet<(u64, u64)>, line_position: u64) {
+fn remove_dead_edges(active_edges: &mut AHashSet<Edge>, line_position: u64) {
     active_edges.retain(|&(start, end)| start > line_position || end > line_position);
 }
 
 /// Given a set of active edges and a new edge, scan the active edges for crossings with the new edge.
-fn scan_edges_for_crossings(active_edges: &AHashSet<(u64, u64)>, edge: &(u64, u64)) -> u64 {
+fn scan_edges_for_crossings(active_edges: &AHashSet<Edge>, edge: &Edge) -> u64 {
     let mut crossings = 0_u64;
 
     for (start, end) in active_edges {

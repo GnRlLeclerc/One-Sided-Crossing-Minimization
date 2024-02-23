@@ -2,6 +2,8 @@
 
 use std::ops::Add;
 
+use ocm_parser::graph_base::Edge;
+
 /// Given a sorted array, returns its median if it exists.
 ///
 /// Returns
@@ -34,7 +36,7 @@ pub fn sorted_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
 }
 
 /// Given an array of values implementing the `PartialOrd` trait, returns an array of ranks where
-/// ranks[i] is the rank of the i-th element in the array. The rank 0 corresponds to the smallest element
+/// ranks[i] is the rank of the i-th element in the array. The rank 0 corresponds to the smallest element.
 pub fn rank_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
     let indices = sorted_index_array(array);
 
@@ -46,14 +48,14 @@ pub fn rank_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
 }
 
 /// Sort a slice of edges in place in lexicographic order, i.e. first by the first node index, then by the second node index.
-pub fn edges_lexicographic_sort(edges: &mut [(u64, u64)]) {
+pub fn edges_lexicographic_sort(edges: &mut [Edge]) {
     edges.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)));
 }
 
 /// Sort a slice of edges in place in order of their minimum index present.
 ///
 /// This sort is useful when dealing with a line sweep algorithm that needs to progressively add
-/// active edges when iterating over a vertical line that goes through the top and bottom u64-indexed nodes
-pub fn edges_min_index_sort(edges: &mut [(u64, u64)]) {
+/// active edges when iterating with a vertical line that goes through the top and bottom u64-indexed nodes
+pub fn edges_min_index_sort(edges: &mut [Edge]) {
     edges.sort_by(|a, b| a.0.min(a.1).cmp(&b.0.min(b.1)));
 }
