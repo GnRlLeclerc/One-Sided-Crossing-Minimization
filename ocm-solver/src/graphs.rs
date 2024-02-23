@@ -1,6 +1,9 @@
 //! Other graph representations that may be better suited for problem solving.
 
-use ocm_parser::bipartite_graph::BipartiteGraph;
+use ocm_parser::{
+    bipartite_graph::BipartiteGraph,
+    graph_base::{Edge, OrderedGraph},
+};
 
 use crate::algo_utils::sorted_index_array;
 
@@ -15,7 +18,7 @@ pub struct AbscissaGraph {
     pub bottom_nodes_abscissas: Vec<f64>,
 
     /// Edges between the top and bottom nodes
-    pub edges: Vec<(u64, u64)>,
+    pub edges: Vec<Edge>,
 }
 
 impl AbscissaGraph {
@@ -123,5 +126,24 @@ impl From<&AbscissaGraph> for BipartiteGraph {
         graph.bottom_node_count = origin.bottom_nodes_abscissas.len() as u64;
 
         graph
+    }
+}
+
+impl OrderedGraph for AbscissaGraph {
+    fn get_ordered_edges(&self) -> Vec<(u64, u64)> {
+        // The AbscissaGraph's nodes are not ordered by their indices.
+        // We must rebuild the edges with the correct indices.
+        let top_indices = sorted_index_array(&self.top_nodes_abscissas);
+        let bottom_indices = sorted_index_array(&self.bottom_nodes_abscissas);
+
+        self.edges
+            .iter()
+            .map(|(top_index, bottom_index)| {
+                (
+                    (top_indices[*top_index as usize]) as u64,
+                    (bottom_indices[*bottom_index as usize]) as u64,
+                )
+            })
+            .collect()
     }
 }

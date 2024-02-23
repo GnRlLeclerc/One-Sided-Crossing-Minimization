@@ -4,6 +4,7 @@ use bipartite_graph::BipartiteGraph;
 use parser::{parse_graph_edges, parse_graph_header};
 
 pub mod bipartite_graph;
+pub mod graph_base;
 pub mod parser;
 
 /// Parse a graph from a source file

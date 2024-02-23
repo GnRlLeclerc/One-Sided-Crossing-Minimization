@@ -35,6 +35,8 @@ This project uses `cargo workspaces`.
 
 ```bash
 ├── datasets     # Graph datasets for testing
+│   ├── large
+│   ├── medium
 │   └── tiny
 ├── ocm-cli      # CLI program for solving the OCM problem
 ├── ocm-gtk      # GTK GUI for solving the OCM problem

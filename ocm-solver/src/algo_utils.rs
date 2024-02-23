@@ -32,3 +32,16 @@ pub fn sorted_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
     indices.sort_by(|&i, &j| array[i].partial_cmp(&array[j]).unwrap());
     indices
 }
+
+/// Sort a slice of edges in place in lexicographic order, i.e. first by the first node index, then by the second node index.
+pub fn edges_lexicographic_sort(edges: &mut [(u64, u64)]) {
+    edges.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)));
+}
+
+/// Sort a slice of edges in place in order of their minimum index present.
+///
+/// This sort is useful when dealing with a line sweep algorithm that needs to progressively add
+/// active edges when iterating over a vertical line that goes through the top and bottom u64-indexed nodes
+pub fn edges_min_index_sort(edges: &mut [(u64, u64)]) {
+    edges.sort_by(|a, b| a.0.min(a.1).cmp(&b.0.min(b.1)));
+}

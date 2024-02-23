@@ -1,5 +1,6 @@
 pub mod algo_utils;
 pub mod algorithms;
+pub mod crossings;
 pub mod graphs;
 
 pub fn add(left: usize, right: usize) -> usize {
