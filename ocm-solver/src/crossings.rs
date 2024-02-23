@@ -34,14 +34,19 @@ pub fn line_sweep_crossings<T: OrderedGraph>(graph: &T) -> u64 {
     // Store currently active edges
     // Space: O(E)
     let mut active_edges: AHashSet<(u64, u64)> = AHashSet::new();
-    let mut line_position; // Current index swept by the line
+    let mut line_position = 0_u64; // Current index swept by the line
     let mut crossings = 0_u64; // Total number of crossings found
+    let mut line_position_changed; // Boolean flag
 
     // Iterate through the edges in appearance order
     // Time: O((E + V) * E) ? Not sure...
     for edge in &edges {
-        line_position = edge.0.min(edge.1); // Update the line position to the appearance index of the new edge
-                                            // TODO: use a boolean flag to know if something changed.
+        let new_line_position = edge.0.min(edge.1); // Update the line position to the appearance index of the new edge
+        line_position_changed = false;
+        if new_line_position != line_position {
+            line_position = new_line_position;
+            line_position_changed = true;
+        }
 
         // 1. Compare with active edges
         crossings += scan_edges_for_crossings(&active_edges, edge);
@@ -50,8 +55,11 @@ pub fn line_sweep_crossings<T: OrderedGraph>(graph: &T) -> u64 {
         active_edges.insert(*edge);
 
         // 3. Remove dead edges (ie: their max index is less or equal to the current line position)
-        // TODO: only scan when line_position changed, use a boolean flag. Slight optimization.
-        remove_dead_edges(&mut active_edges, line_position);
+        // Only do this if the line position has changed. We forget cleaning (n,n) vertical edges,
+        // but we gain a lot more by avoiding to scan every older edge for every new edge on the same sweep line position.
+        if line_position_changed {
+            remove_dead_edges(&mut active_edges, line_position);
+        }
     }
 
     crossings

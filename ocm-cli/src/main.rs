@@ -3,7 +3,9 @@ use std::time::Instant;
 use clap::Parser;
 use ocm_parser::{bipartite_graph::BipartiteGraph, parse_file};
 use ocm_plotter::plottable::plot_to_file;
-use ocm_solver::{algorithms::median_heuristic_solve, graphs::AbscissaGraph};
+use ocm_solver::{
+    algorithms::median_heuristic_solve, crossings::line_sweep_crossings, graphs::AbscissaGraph,
+};
 
 #[derive(Parser, Debug)]
 #[command(author="Thibaut de Saivre, Thomas Fourier", version, about="Solver for the OCM problem", long_about = None)]
@@ -44,10 +46,14 @@ fn main() {
         println!("Graph read from file: {:#?}", graph);
     }
 
+    println!("Crossings before: {}", line_sweep_crossings(&graph));
+
     // Do the median computation
     let mut graph: AbscissaGraph = (&graph).into(); // Convert the input graph into a graph with abscissas
     median_heuristic_solve(&mut graph);
     graph.rebalance_abscissas();
+
+    println!("Crossings after: {}", line_sweep_crossings(&graph));
 
     // Measure the elapsed time
     let elapsed_time = start_time.elapsed();

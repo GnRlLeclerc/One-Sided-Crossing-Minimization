@@ -33,6 +33,18 @@ pub fn sorted_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
     indices
 }
 
+/// Given an array of values implementing the `PartialOrd` trait, returns an array of ranks where
+/// ranks[i] is the rank of the i-th element in the array. The rank 0 corresponds to the smallest element
+pub fn rank_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
+    let indices = sorted_index_array(array);
+
+    let mut ranks = vec![0; array.len()];
+    for (rank, index) in indices.iter().enumerate() {
+        ranks[*index] = rank;
+    }
+    ranks
+}
+
 /// Sort a slice of edges in place in lexicographic order, i.e. first by the first node index, then by the second node index.
 pub fn edges_lexicographic_sort(edges: &mut [(u64, u64)]) {
     edges.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)));
