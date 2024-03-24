@@ -1,1 +1,6 @@
-/target
+# Ignore rust output
+target/
+
+# Ignore analytics
+analytics/
+

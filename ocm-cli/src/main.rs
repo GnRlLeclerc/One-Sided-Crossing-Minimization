@@ -1,7 +1,7 @@
 use std::time::Instant;
 
 use clap::Parser;
-use ocm_parser::parse_file;
+use ocm_parser::{parse_file, run_output::RunOutput};
 use ocm_plotter::plottable::plot_to_file;
 use ocm_solver::{
     algorithms::{solve, Algorithm},
@@ -31,6 +31,10 @@ struct Args {
     #[arg(short, long)]
     output_file: Option<String>,
 
+    /// Save analytics to a file
+    #[arg(short, long)]
+    analytics: bool,
+
     /// Plot the result to a file
     #[arg(short, long)]
     plot: bool,
@@ -51,15 +55,17 @@ fn main() {
         println!("Graph read from file: {:?}", graph);
     }
 
+    let initial_crossings = line_sweep_crossings(&graph);
     if args.verbose {
-        println!("Crossings before: {}", line_sweep_crossings(&graph));
+        println!("Crossings before: {}", initial_crossings);
         println!("Using algorithm: {:?}", args.algorithm);
     }
 
     let graph = solve(&graph, &args.algorithm, args.verbose);
 
+    let final_crossings = line_sweep_crossings(&graph);
     if args.verbose {
-        println!("Crossings after: {}", line_sweep_crossings(&graph));
+        println!("Crossings after: {}", final_crossings);
     }
 
     // Print elapsed time if the flag is set
@@ -78,6 +84,20 @@ fn main() {
     if args.plot {
         // Save the resulting image to a file
         plot_to_file(&graph, "graph.png");
+    }
+
+    if args.analytics {
+        // Save the analytics to a file
+        let parts: Vec<&str> = args.source.split('/').collect();
+
+        let run_output = RunOutput::new(
+            &args.source,
+            &args.algorithm.to_string(),
+            parts[parts.len() - 2],
+            initial_crossings,
+            final_crossings,
+        );
+        run_output.save_to_file();
     }
 
     // Save the output to a file if the flag is set

@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter};
+
 use ocm_parser::bipartite_graph::BipartiteGraph;
 
 use crate::graphs::abscissa_graph::AbscissaGraph;
@@ -37,6 +39,18 @@ pub fn solve(graph: &BipartiteGraph, algorithm: &Algorithm, verbose: bool) -> Bi
             let mut graph = graph.into();
             barycenter_heuristic::iterated_barycenter_heuristic_solve(&mut graph, verbose);
             (&graph).into()
+        }
+    }
+}
+
+/// Directory names for the analytics output for each algorithm
+impl Display for Algorithm {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Algorithm::Median => write!(f, "median"),
+            Algorithm::IterMedian => write!(f, "iterated_median"),
+            Algorithm::Barycenter => write!(f, "barycenter"),
+            Algorithm::IterBarycenter => write!(f, "iterated_barycenter"),
         }
     }
 }

@@ -6,6 +6,7 @@ use parser::{parse_graph_edges, parse_graph_header};
 pub mod bipartite_graph;
 pub mod graph_base;
 pub mod parser;
+pub mod run_output;
 
 /// Parse a graph from a source file
 pub fn parse_file(filename: &str) -> BipartiteGraph {
