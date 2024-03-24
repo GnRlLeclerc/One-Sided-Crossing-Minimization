@@ -29,10 +29,14 @@ pub fn solve(graph: &BipartiteGraph, algorithm: &Algorithm, verbose: bool) -> Bi
             (&graph).into()
         }
         Algorithm::Barycenter => {
-            todo!("Barycenter heuristic not implemented yet.");
+            let mut graph = graph.into();
+            barycenter_heuristic::barycenter_heuristic_solve(&mut graph);
+            (&graph).into()
         }
         Algorithm::IterBarycenter => {
-            todo!("Iterative barycenter heuristic not implemented yet.");
+            let mut graph = graph.into();
+            barycenter_heuristic::iterated_barycenter_heuristic_solve(&mut graph, verbose);
+            (&graph).into()
         }
     }
 }
