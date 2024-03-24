@@ -1,5 +1,5 @@
 use ocm_parser::bipartite_graph::BipartiteGraph;
-use ocm_solver::graphs::AbscissaGraph;
+use ocm_solver::graphs::abscissa_graph::AbscissaGraph;
 use plottable::Plottable;
 use plotters::prelude::*;
 use plotters::{backend::DrawingBackend, coord::Shift, drawing::DrawingArea};

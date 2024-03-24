@@ -4,7 +4,8 @@ use clap::Parser;
 use ocm_parser::{bipartite_graph::BipartiteGraph, parse_file};
 use ocm_plotter::plottable::plot_to_file;
 use ocm_solver::{
-    algorithms::median_heuristic_solve, crossings::line_sweep_crossings, graphs::AbscissaGraph,
+    algorithms::median_heuristic::median_heuristic_solve, crossings::line_sweep_crossings,
+    graphs::abscissa_graph::AbscissaGraph,
 };
 
 #[derive(Parser, Debug)]

@@ -6,8 +6,8 @@ use crate::gtk_utils::plot_in_window;
 use clap::Parser;
 use ocm_parser::bipartite_graph::BipartiteGraph;
 use ocm_parser::parse_file;
-use ocm_solver::algorithms::median_heuristic_solve;
-use ocm_solver::graphs::AbscissaGraph;
+use ocm_solver::algorithms::median_heuristic::median_heuristic_solve;
+use ocm_solver::graphs::abscissa_graph::AbscissaGraph;
 
 mod gtk_utils;
 mod plotter_widget;
