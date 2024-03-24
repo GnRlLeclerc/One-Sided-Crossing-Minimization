@@ -9,7 +9,7 @@ A solver for the One-sided crossing minimization problem.
 Run the CLI solver with the following command:
 
 ```bash
-cargo run  --bin ocm-cli -- datasets/tiny/complete_4_5.gr -t
+cargo run  --bin ocm-cli -- -a median -v datasets/tiny/complete_4_5.gr
 ```
 
 ### GTK
@@ -26,13 +26,13 @@ pkg-config --modversion gtk4
 Then run the GUI with:
 
 ```bash
-cargo run --release --bin ocm-gtk -- datasets/tiny/complete_4_5.gr
+cargo run --release --bin ocm-gtk -- -a median datasets/tiny/complete_4_5.gr
 ```
 
 Run the CLI solver for large graphs and time it with:
 
 ```bash
-cargo run --release --bin ocm-cli --  -t datasets/large/25.gr
+cargo run --release --bin ocm-cli -- -a median -v datasets/large/25.gr
 ```
 
 ## Project structure

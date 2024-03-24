@@ -1,6 +1,9 @@
 use ordered_float::OrderedFloat;
 
-use crate::{algo_utils::sorted_array_median, graphs::abscissa_graph::AbscissaGraph};
+use crate::{
+    algo_utils::sorted_array_median, crossings::line_sweep_crossings,
+    graphs::abscissa_graph::AbscissaGraph,
+};
 
 /// Do one in-place iteration of the median heuristic method on a graph
 /// where all vertices have an abscissa.
@@ -70,4 +73,44 @@ pub fn median_heuristic_solve(graph: &mut AbscissaGraph) {
     // Swap vectors
     graph.top_nodes_abscissas = top_x;
     graph.bottom_nodes_abscissas = bottom_x;
+}
+
+/// Do multiple in-place iterations of the median heuristic method on a graph
+/// where all vertices have an abscissa. Count the crossings before each iteration,
+/// and stop when the crossing count stops decreasing.
+///
+/// Algorithm
+/// ---------
+/// 1. Count the crossings in the graph.
+///
+/// 2. For each node (top and bottom), set the new abscissa to the median of its neighbors' abscissas.
+///    * If the node has no neighbors, keep its abscissa.
+///    * If the node has an even number of neighbors, take the average of the two middle values.
+///
+/// 3. Rebalance the graph node positions, and start again.
+///
+/// Note: the abscissas must have to be rebalanced before displaying the graph again in order to have a pretty display.
+///
+/// Complexity
+/// ----------
+/// * Time: Depends on the number of iterations.
+/// * Space: `O(V + E)`
+pub fn iterated_median_heuristic_solve(graph: &mut AbscissaGraph, verbose: bool) {
+    let mut new_crossings = line_sweep_crossings(graph);
+    let mut crossings = new_crossings + 1;
+    let mut iteration = 0;
+
+    while new_crossings < crossings {
+        median_heuristic_solve(graph);
+        graph.rebalance_abscissas(); // Rebalance the node positions, because we use medians
+
+        // Swap and recompute crossings
+        crossings = new_crossings;
+        new_crossings = line_sweep_crossings(graph);
+
+        if verbose {
+            iteration += 1;
+            println!("Iteration {}: {} crossings", iteration, crossings);
+        }
+    }
 }

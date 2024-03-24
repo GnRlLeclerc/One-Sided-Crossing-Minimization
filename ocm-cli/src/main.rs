@@ -1,27 +1,31 @@
 use std::time::Instant;
 
 use clap::Parser;
-use ocm_parser::{bipartite_graph::BipartiteGraph, parse_file};
+use ocm_parser::parse_file;
 use ocm_plotter::plottable::plot_to_file;
 use ocm_solver::{
-    algorithms::median_heuristic::median_heuristic_solve, crossings::line_sweep_crossings,
-    graphs::abscissa_graph::AbscissaGraph,
+    algorithms::{solve, Algorithm},
+    crossings::line_sweep_crossings,
 };
 
 #[derive(Parser, Debug)]
-#[command(author="Thibaut de Saivre, Thomas Fourier", version, about="Solver for the OCM problem", long_about = None)]
+#[command(author="Thibaut de Saivre", version, about="Solver for the OCM problem", long_about = None)]
 struct Args {
     /// Graph source file
     #[arg()]
     source: String,
 
-    /// Measure execution time
-    #[arg(short, long)]
-    time: bool,
-
     /// Display debug information
     #[arg(short, long)]
     debug: bool,
+
+    /// Display progression
+    #[arg(short, long)]
+    verbose: bool,
+
+    /// Algorithm to use
+    #[arg(short, long, value_enum)]
+    algorithm: Algorithm,
 
     /// Save the output to a file
     #[arg(short, long)]
@@ -47,20 +51,22 @@ fn main() {
         println!("Graph read from file: {:?}", graph);
     }
 
-    println!("Crossings before: {}", line_sweep_crossings(&graph));
+    if args.verbose {
+        println!("Crossings before: {}", line_sweep_crossings(&graph));
+        println!("Using algorithm: {:?}", args.algorithm);
+    }
 
-    // Do the median computation
-    let mut graph: AbscissaGraph = (&graph).into(); // Convert the input graph into a graph with abscissas
-    median_heuristic_solve(&mut graph);
-    graph.rebalance_abscissas();
+    let graph = solve(&graph, &args.algorithm, args.verbose);
 
-    println!("Crossings after: {}", line_sweep_crossings(&graph));
-
-    // Measure the elapsed time
-    let elapsed_time = start_time.elapsed();
+    if args.verbose {
+        println!("Crossings after: {}", line_sweep_crossings(&graph));
+    }
 
     // Print elapsed time if the flag is set
-    if args.time {
+    if args.verbose {
+        // Measure the elapsed time
+        let elapsed_time = start_time.elapsed();
+
         // Print the elapsed time in seconds and milliseconds
         println!(
             "Elapsed time: {}.{} seconds",
@@ -77,7 +83,6 @@ fn main() {
     // Save the output to a file if the flag is set
     if let Some(output_file) = args.output_file {
         // Save the graph to a file
-        let graph: BipartiteGraph = (&graph).into();
         graph.save_to_file(&output_file).unwrap();
     }
 }
