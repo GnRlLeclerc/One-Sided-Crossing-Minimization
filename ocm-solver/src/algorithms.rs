@@ -1,5 +1,7 @@
 use ocm_parser::bipartite_graph::BipartiteGraph;
 
+use crate::graphs::abscissa_graph::AbscissaGraph;
+
 pub mod barycenter_heuristic;
 pub mod median_heuristic;
 
@@ -17,7 +19,7 @@ pub enum Algorithm {
 pub fn solve(graph: &BipartiteGraph, algorithm: &Algorithm, verbose: bool) -> BipartiteGraph {
     match algorithm {
         Algorithm::Median => {
-            let mut graph = graph.into();
+            let mut graph: AbscissaGraph = graph.into();
             median_heuristic::median_heuristic_solve(&mut graph);
             (&graph).into()
         }

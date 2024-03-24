@@ -36,13 +36,13 @@ pub fn sorted_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
 }
 
 /// Given an array of values implementing the `PartialOrd` trait, returns an array of ranks where
-/// ranks[i] is the rank of the i-th element in the array. The rank 0 corresponds to the smallest element.
+/// `ranks[i]` is the rank of the i-th element in the array. The rank 0 corresponds to the smallest element.
 pub fn rank_index_array<T: PartialOrd>(array: &[T]) -> Vec<usize> {
     let indices = sorted_index_array(array);
 
     let mut ranks = vec![0; array.len()];
-    for (rank, index) in indices.iter().enumerate() {
-        ranks[*index] = rank;
+    for (rank, &index) in indices.iter().enumerate() {
+        ranks[index] = rank;
     }
     ranks
 }

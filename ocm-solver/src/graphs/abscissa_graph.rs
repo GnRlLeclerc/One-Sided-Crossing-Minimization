@@ -3,7 +3,7 @@ use ocm_parser::{
     graph_base::{Edge, OrderedGraph},
 };
 
-use crate::algo_utils::{rank_index_array, sorted_index_array};
+use crate::algo_utils::sorted_index_array;
 
 /// Abscissa-based graph data structure, where each node has an abscissa attributed at construction.
 /// By convention, we space all vertices evenly among the top and bottom, such that the extremal vertices
@@ -127,12 +127,12 @@ impl From<&AbscissaGraph> for BipartiteGraph {
     }
 }
 
+/// Implement the OrderedGraph trait for the AbscissaGraph
 impl OrderedGraph for AbscissaGraph {
     fn get_ordered_edges(&self) -> Vec<Edge> {
-        // The AbscissaGraph's nodes are not ordered by their indices.
-        // We must rebuild the edges with the correct indices.
-        let top_indices = rank_index_array(&self.top_nodes_abscissas);
-        let bottom_indices = rank_index_array(&self.bottom_nodes_abscissas);
+        // The AbscissaGraph node abscissas are not in order, we need to compute their sorted indices and update the edges
+        let top_indices = sorted_index_array(&self.top_nodes_abscissas);
+        let bottom_indices = sorted_index_array(&self.bottom_nodes_abscissas);
 
         self.edges
             .iter()

@@ -99,8 +99,11 @@ pub fn iterated_median_heuristic_solve(graph: &mut AbscissaGraph, verbose: bool)
     let mut new_crossings = line_sweep_crossings(graph);
     let mut crossings = new_crossings + 1;
     let mut iteration = 0;
+    let mut previous_graph = graph.clone();
 
     while new_crossings < crossings {
+        previous_graph = graph.clone(); // Save the previous graph (if the last iteration is not fruitful). This may be expensive
+
         median_heuristic_solve(graph);
         graph.rebalance_abscissas(); // Rebalance the node positions, because we use medians
 
@@ -110,7 +113,12 @@ pub fn iterated_median_heuristic_solve(graph: &mut AbscissaGraph, verbose: bool)
 
         if verbose {
             iteration += 1;
-            println!("Iteration {}: {} crossings", iteration, crossings);
+            println!("Iteration {}: {} crossings", iteration, new_crossings);
         }
+    }
+
+    // If the last iteration was not fruitful, revert to the previous graph
+    if new_crossings > crossings {
+        *graph = previous_graph;
     }
 }
