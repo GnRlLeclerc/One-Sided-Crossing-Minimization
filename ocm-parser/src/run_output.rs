@@ -10,6 +10,7 @@ pub struct RunOutput {
     dataset: String,
     initial_crossings: u64,
     final_crossings: u64,
+    elapsed_nanos: u64,
 }
 
 impl RunOutput {
@@ -20,6 +21,7 @@ impl RunOutput {
         dataset: &str,
         initial_crossings: u64,
         final_crossings: u64,
+        elapsed_nanos: u64,
     ) -> Self {
         RunOutput {
             filename: filename.to_string(),
@@ -27,14 +29,15 @@ impl RunOutput {
             dataset: dataset.to_string(),
             initial_crossings,
             final_crossings,
+            elapsed_nanos,
         }
     }
 
     /// Save the output to a file
     /// Format:
-    /// <filename>
     /// <initial_crossings>
     /// <final_crossings>
+    /// <elapsed_nanos>
     pub fn save_to_file(&self) {
         let out_path = format!("analytics/{}/{}", self.algorithm, self.dataset);
 
@@ -52,6 +55,8 @@ impl RunOutput {
         file.write_all(format!("{}\n", self.initial_crossings).as_bytes())
             .unwrap();
         file.write_all(format!("{}\n", self.final_crossings).as_bytes())
+            .unwrap();
+        file.write_all(format!("{}\n", self.elapsed_nanos).as_bytes())
             .unwrap();
     }
 }

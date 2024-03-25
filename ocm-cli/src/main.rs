@@ -43,8 +43,6 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let start_time = Instant::now();
-
     if args.debug {
         println!("Reading graph from file {}", args.source);
     }
@@ -61,7 +59,9 @@ fn main() {
         println!("Using algorithm: {:?}", args.algorithm);
     }
 
+    let start_time = Instant::now();
     let graph = solve(&graph, &args.algorithm, args.verbose);
+    let elapsed_time = start_time.elapsed();
 
     let final_crossings = line_sweep_crossings(&graph);
     if args.verbose {
@@ -70,9 +70,6 @@ fn main() {
 
     // Print elapsed time if the flag is set
     if args.verbose {
-        // Measure the elapsed time
-        let elapsed_time = start_time.elapsed();
-
         // Print the elapsed time in seconds and milliseconds
         println!(
             "Elapsed time: {}.{} seconds",
@@ -96,6 +93,7 @@ fn main() {
             parts[parts.len() - 2],
             initial_crossings,
             final_crossings,
+            elapsed_time.as_nanos() as u64,
         );
         run_output.save_to_file();
     }
