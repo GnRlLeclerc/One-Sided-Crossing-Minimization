@@ -21,7 +21,7 @@ use ocm_parser::graph_base::{Edge, OrderedGraph};
 ///
 /// Complexity
 /// ----------
-/// * Time: `O((E + V) * E)` ? Not sure...
+/// * Time: `O((E + V) * E) worst case. Can go down to `O((E + V) * log(E))` if the graph is sparse.
 /// * Space: `O(E)`
 ///
 pub fn line_sweep_crossings<T: OrderedGraph>(graph: &T) -> u64 {

@@ -1,0 +1,19 @@
+# Ignore everything
+*
+
+# ...except the non-generated files
+!.gitignore
+!ocm-report.pdf
+!ocm-report.tex
+
+!polytechnique-armes.pdf
+!polytechnique-filetcourt.pdf
+!polytechnique-filetlongrouge.pdf
+!polytechnique-logohori.pdf
+!polytechnique-logovert.pdf
+!polytechnique.sty
+!typographix.pdf
+!references.bib
+
+!images/
+!images/*
