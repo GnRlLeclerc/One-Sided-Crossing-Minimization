@@ -41,8 +41,6 @@
 \logo{typographix}
 
 
-
-
 \begin{document}
 \maketitle
 
@@ -287,6 +285,40 @@ This method gives similar results and advantages to the barycentric one.
 \eject
 
 \section{Benchmarks}
+
+\subsection{Runtime Complexity}
+
+In this section we compare and analyze the runtime complexity of the presented algorithms.
+
+\subsubsection*{Barycentric vs Median}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/node_runtime_complexity.png}
+	\caption{Runtime complexity relative to node count}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/edge_runtime_complexity.png}
+	\caption{Runtime complexity relative to edge count}
+\end{figure}
+
+As expected, these figures show that the single iteration median and barycentric algorithms have a linear runtime complexity relative to the number of nodes and edges.\\
+
+\subsubsection*{Line Sweep Crossing Count}
+We compared the runtime complexity of the line sweep crossing counting algorithm to different combinations of edge and node counts.
+As expected from the analysis, the best fitting complexity is $O((E + V) \times E)$. You can find more complexity computations on the jupyter notebook.\\
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=1\textwidth]{images/runtime_crossing.png}
+	\caption{Line sweep runtime complexity}
+\end{figure}
+
+
+\subsection{Performance}
 
 TODO
 
