@@ -4,3 +4,5 @@ target/
 # Ignore analytics
 analytics/
 
+# Ignore any csv output
+*.csv

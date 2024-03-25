@@ -86,3 +86,65 @@ fn scan_edges_for_crossings(active_edges: &AHashSet<Edge>, edge: &Edge) -> u64 {
 
     crossings
 }
+
+#[cfg(test)]
+mod tests {
+    use ocm_parser::parse_file;
+    use rayon::prelude::*;
+    use std::{
+        fs::File,
+        io::{self, BufWriter, Write},
+        sync::{
+            atomic::{AtomicUsize, Ordering},
+            Arc, Mutex,
+        },
+    };
+    use walkdir::WalkDir;
+
+    #[test]
+    fn benchmark_crossings() {
+        println!("Benchmarking crossings...");
+
+        let files = WalkDir::new("../datasets")
+            .into_iter()
+            .filter_map(Result::ok)
+            .filter(|e| e.path().is_file())
+            .filter_map(|e| e.path().to_str().map(|s| s.to_string()))
+            .collect::<Vec<_>>();
+
+        let files_count = files.len();
+        let processed_count = Arc::new(AtomicUsize::new(0));
+
+        // Progressively write the results to a file
+        let file = File::create("../crossings_benchmark.csv").unwrap();
+        let writer = Arc::new(Mutex::new(BufWriter::new(file)));
+
+        files.par_iter().for_each(|filename| {
+            let graph = parse_file(filename);
+
+            // Time the crossings computation
+            let start_time = std::time::Instant::now();
+            crate::crossings::line_sweep_crossings(&graph);
+            let elapsed_time = start_time.elapsed();
+
+            // Write the results to the file
+            let mut writer = writer.lock().unwrap();
+            writeln!(
+                writer,
+                "{},{},{}",
+                graph.top_node_count + graph.bottom_node_count,
+                graph.edges.len(),
+                elapsed_time.as_nanos()
+            )
+            .unwrap();
+            writer.flush().unwrap(); // Directly flush because we may interrupt a long running benchmark,
+                                     // and we cannot defer this flush because we do not have control over interruption signals.
+
+            // Progression indicator
+            let count = processed_count.fetch_add(1, Ordering::SeqCst) + 1;
+            print!("\rProcessed {} / {} files.", count, files_count);
+            io::stdout().flush().unwrap(); // Manually flush to ensure the output is displayed immediately
+        });
+        println!("Done !");
+    }
+}

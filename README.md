@@ -1,6 +1,10 @@
 # INF562 - OCM Problem
 
-A solver for the One-sided crossing minimization problem.
+Author: Thibaut de Saivre
+
+A solver for the One-sided crossing minimization problem.  
+See [the PDF report here](./report/ocm-report.pdf).  
+See some [python benchmarks here](./analytics.ipynb).
 
 ## Quickstart
 
@@ -49,4 +53,18 @@ This project uses `cargo workspaces`.
 ├── ocm-parser   # Graph dataset parser
 ├── ocm-plotter  # Plotting functions
 └── ocm-solver   # Implementation logic
+```
+
+## Benchmarks
+
+Various benchmarks are available using tests.
+
+- `line_sweep_crossings` benchmarked over all datasets, in the [`crossings.rs`](ocm-solver/src/crossings.rs) file.
+
+ISSUE: the benchmarks run very long for 2 of the large dataset files. You can interrupt the benchmark early, as the results are progressively written to the [`crossings_benchmark.csv`](./crossings_benchmark.csv) file.
+
+Run them with the following command:
+
+```bash
+cargo test -- --nocapture # Do not capture stdout so that we can see progress indicators in stdout
 ```
