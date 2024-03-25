@@ -5,6 +5,7 @@ Author: Thibaut de Saivre
 A solver for the One-sided crossing minimization problem.  
 See [the PDF report here](./report/ocm-report.pdf).  
 See some [python benchmarks here](./analytics.ipynb).
+The challenge outputs are in the [output](./output) folder.
 
 ## Quickstart
 
@@ -53,6 +54,7 @@ This project uses `cargo workspaces`.
 ├── ocm-parser   # Graph dataset parser
 ├── ocm-plotter  # Plotting functions
 ├── ocm-solver   # Implementation logic
+├── output       # Challenge outputs
 └── report       # LateX report
 ```
 
