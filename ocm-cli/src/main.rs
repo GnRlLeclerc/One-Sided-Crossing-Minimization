@@ -53,7 +53,13 @@ fn main() {
         println!("Graph read from file: {:?}", graph);
     }
 
-    let initial_crossings = line_sweep_crossings(&graph);
+    let mut initial_crossings = 0_u64;
+
+    // Lazy evaluation
+    if args.verbose || args.analytics {
+        initial_crossings = line_sweep_crossings(&graph);
+    }
+
     if args.verbose {
         println!("Crossings before: {}", initial_crossings);
         println!("Using algorithm: {:?}", args.algorithm);
@@ -63,7 +69,12 @@ fn main() {
     let graph = solve(&graph, &args.algorithm, args.verbose);
     let elapsed_time = start_time.elapsed();
 
-    let final_crossings = line_sweep_crossings(&graph);
+    let mut final_crossings = 0_u64;
+
+    // Lazy evaluation
+    if args.verbose || args.analytics {
+        final_crossings = line_sweep_crossings(&graph);
+    }
     if args.verbose {
         println!("Crossings after: {}", final_crossings);
     }
