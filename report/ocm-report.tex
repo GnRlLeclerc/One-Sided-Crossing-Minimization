@@ -36,8 +36,8 @@
 
 \author{Thibaut de Saivre}
 \date{\today}
-\title{OCM Problem}
-\subtitle{Heuristics and solutions}
+\title{One-sided crossing minimization problem}
+\subtitle{A study of barycentric and median heuristics}
 \logo{typographix}
 
 
@@ -320,7 +320,41 @@ As expected from the analysis, the best fitting complexity is $O((E + V) \times 
 
 \subsection{Performance}
 
-TODO
+\subsubsection*{Naïve performance on the tiny and medium datasets}
+
+We compare the overall algorithm performance using the following score:
+
+$$
+	\text{score} = \frac{\text{initial\_crossings} - \text{final\_crossings}}{\text{initial\_crossings}}
+$$
+
+The results are as follows:
+\begin{itemize}
+	\item \textbf{median}: -0.374050
+	\item \textbf{barycentric}: -0.373386
+	\item \textbf{iterated median}: 0.043431
+	\item \textbf{iterated barycentric}: 0.044829
+\end{itemize}
+
+Single iteration algorithms often give catastrophically bad results, increasing the crossing counts overall.\\
+
+When comparing crossings between single iteration median and barycentric methods, the median one gives 18\% more crossings in average.
+
+\subsubsection*{Bounded performance on the tiny and medium datasets}
+
+In order to see how much improvement the subsequent iterations can bring, ignoring bad first iterations, we can use the initial crossing count as a lower bound.\\
+
+We compare the average $\frac{\text{single iteration} + 1}{\text{multiple iterations} + 1}$ ratios before and after bounding with the barycentric algorithm. We add 1 in order to avoid division by zero.\\
+
+The results are as follows:
+
+\begin{enumerate}
+	\item before bounding: 1.4951496268432702
+	\item after bounding: 1.0685313490478447
+\end{enumerate}
+
+In average, the single iteration barycentric method gives 50\% more crossings than the multiple iteration one.
+If we ignore bad first iterations, we only get 6\% more crossings in average, showing that doing multiple iterations is beneficial.
 
 \eject
 

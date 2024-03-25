@@ -52,7 +52,8 @@ This project uses `cargo workspaces`.
 ├── ocm-gtk      # GTK GUI for solving the OCM problem
 ├── ocm-parser   # Graph dataset parser
 ├── ocm-plotter  # Plotting functions
-└── ocm-solver   # Implementation logic
+├── ocm-solver   # Implementation logic
+└── report       # LateX report
 ```
 
 ## Benchmarks
